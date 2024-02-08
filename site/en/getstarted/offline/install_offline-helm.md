@@ -33,6 +33,7 @@ helm template my-release --set cluster.enabled=false --set etcd.replicaCount=1 -
 ```cluster
 helm template my-release milvus/milvus > milvus_manifest.yaml
 ```
+Note that the cluster release needs a [K8s service](https://milvus.io/docs/install_cluster-milvusoperator.md#Create-a-K8s-Cluster), [Minikube](https://minikube.sigs.k8s.io/docs/) is recommended  for a quick start. 
 
 If you want to change multiple configurations, you can download a [`value.yaml`](https://github.com/milvus-io/milvus-helm/blob/master/charts/milvus/values.yaml) file, specify configurations in it, and generate a manifest based on it.
 
@@ -71,6 +72,41 @@ Having transferred the images to the target host, run the following command to i
 
 ```
 kubectl apply -f milvus_manifest.yaml
+```
+
+Run the following command to check the current status of Milvus pods.
+
+```bash
+kubectl get pods
+```
+
+```
+NAME                                            READY   STATUS            RESTARTS   AGE
+my-release-etcd-0                               0/1     Running           0          2m14s
+my-release-etcd-1                               0/1     Running           0          2m14s
+my-release-etcd-2                               0/1     Running           0          2m14s
+my-release-milvus-datacoord-6cc5c78447-2bl9h    0/1     Running           0          2m14s
+my-release-milvus-datanode-6c6946fb56-xnx4v     0/1     Running           0          2m14s
+my-release-milvus-indexcoord-777b8f4766-4tghb   0/1     Running           0          2m14s
+my-release-milvus-indexnode-7dbd8f476f-kpgtl    0/1     PodInitializing   0          2m14s
+my-release-milvus-proxy-75c4dd96b-5ndwf         0/1     PodInitializing   0          2m14s
+my-release-milvus-querycoord-5b67695b5f-6tv7d   0/1     PodInitializing   0          2m14s
+my-release-milvus-querynode-b49bdb475-tht6k     0/1     PodInitializing   0          2m14s
+my-release-milvus-rootcoord-6f5998b4f5-4wdz6    0/1     PodInitializing   0          2m14s
+my-release-minio-0                              1/1     Running           0          2m14s
+my-release-minio-1                              1/1     Running           0          2m14s
+my-release-minio-2                              1/1     Running           0          2m14s
+my-release-minio-3                              1/1     Running           0          2m14s
+my-release-pulsar-bookie-0                      0/1     Init:0/1          0          2m14s
+my-release-pulsar-bookie-1                      0/1     Init:0/1          0          2m13s
+my-release-pulsar-bookie-2                      0/1     Init:0/1          0          2m13s
+my-release-pulsar-bookie-init-4jb74             0/1     Init:0/1          0          2m13s
+my-release-pulsar-broker-0                      0/1     Init:0/2          0          2m14s
+my-release-pulsar-proxy-0                       0/1     Init:0/2          0          2m14s
+my-release-pulsar-pulsar-init-vmr8d             0/1     Init:0/2          0          2m13s
+my-release-pulsar-recovery-0                    0/1     Init:0/1          0          2m14s
+my-release-pulsar-zookeeper-0                   1/1     Running           0          2m13s
+my-release-pulsar-zookeeper-1                   0/1     Running           0          8s
 ```
 
 ## Uninstall Milvus
